@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setAdverts, setPosts } from "state";
+import { setAdverts} from "state";
 import AdvertWidget from "./AdvertWidget";
 
-const AdvertsWidget = ({ userId, isProfile = false }) => {
+const AdvertsWidget = ({ channelId, isProfile = false }) => {
   const dispatch = useDispatch();
   const adverts = useSelector((state) => state.adverts);
   const token = useSelector((state) => state.token);
@@ -14,12 +14,11 @@ const AdvertsWidget = ({ userId, isProfile = false }) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    dispatch(setAdverts({ adverts: data }));
+    dispatch(setAdverts({ adverts: data }));    
   };
-
   const getUserAdverts = async () => {
     const response = await fetch(
-      `http://localhost:3001/adverts/${userId}/adverts`,
+      `http://localhost:3001/adverts/${channelId}/adverts`,
       {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -35,7 +34,7 @@ const AdvertsWidget = ({ userId, isProfile = false }) => {
     } else {
       getAdverts();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); 
 
   return (
     <>
@@ -43,10 +42,12 @@ const AdvertsWidget = ({ userId, isProfile = false }) => {
         ({
           _id,
           userId,
+          channelId,
           firstName,
           lastName,
+          availability,
+          price,
           description,
-          location,
           picturePath,
           userPicturePath,
           
@@ -55,9 +56,11 @@ const AdvertsWidget = ({ userId, isProfile = false }) => {
             key={_id}
             advertId={_id}
             advertUserId={userId}
+            advertChannelId={channelId}
             name={`${firstName} ${lastName}`}
             description={description}
-            location={location}
+            availability={availability}
+            price={price}
             picturePath={picturePath}
             userPicturePath={userPicturePath}
             

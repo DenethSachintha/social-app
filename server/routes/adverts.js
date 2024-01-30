@@ -1,15 +1,13 @@
 import express from "express";
-import { getFeedAdverts, getUserAdverts } from "../controllers/advert.js";
+import { getFeedAdverts, getUserAdverts,getChannelAdverts } from "../controllers/advert.js";
 import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
 /* READ */
 router.get("/", verifyToken, getFeedAdverts);
-//router.get("/",  getFeedAdverts);
-router.get("/:userId/adverts", verifyToken, getUserAdverts);
+router.get("/:userId/adverts",verifyToken, getUserAdverts);
+router.get("/:channelId/adverts",verifyToken, getChannelAdverts);
 
-/* UPDATE */
-//router.patch("/:id/like", verifyToken, likePost);
 
 export default router;

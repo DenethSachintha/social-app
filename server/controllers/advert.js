@@ -1,16 +1,17 @@
 import Advert from "../models/Advert.js";
 import User from "../models/User.js";
-
 /* CREATE */
 export const createAdvert = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    const { userId, channelId, description, picturePath ,availability,price} = req.body;
     const user = await User.findById(userId);
     const newAdvert = new Advert({
-      userId,
+      userId,    
+      channelId,
       firstName: user.firstName,
       lastName: user.lastName,
-      location: user.location,
+      availability,
+      price,
       description,
       userPicturePath: user.picturePath,
       picturePath,
@@ -44,28 +45,12 @@ export const getUserAdverts = async (req, res) => {
   }
 };
 
-/* UPDATE */
-// export const likePost = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { userId } = req.body;
-//     const post = await Post.findById(id);
-//     const isLiked = post.likes.get(userId);
-
-//     if (isLiked) {
-//       post.likes.delete(userId);
-//     } else {
-//       post.likes.set(userId, true);
-//     }
-
-//     const updatedPost = await Post.findByIdAndUpdate(
-//       id,
-//       { likes: post.likes },
-//       { new: true }
-//     );
-
-//     res.status(200).json(updatedPost);
-//   } catch (err) {
-//     res.status(404).json({ message: err.message });
-//   }
-// };
+export const getChannelAdverts = async (req, res) => {
+  try {
+    const { channelId } = req.params;
+    const advert = await Advert.find({ channelId });
+    res.status(200).json(advert);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
